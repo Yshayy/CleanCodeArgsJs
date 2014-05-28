@@ -1,5 +1,21 @@
 var Args = (function()
 {
+    var shift = function(arr){return arr.shift();}
+
+    var marshalers = {
+        number: compose(shift, parseFloat),
+        string: shift,
+        boolean: function(x) {return true;},
+        numberList: compose(shift, function(x){ return x.split(",").map(parseFloat)})
+    }
+
+    var defaults = {
+        number:0,
+        string:"",
+        boolean: false,
+        numberList: []
+    };
+
     function compose(fn1, fn2){return function(){return fn2(fn1.apply(this,arguments))}}
 
     function isFlag(s){return s[0] === '-'}
@@ -16,23 +32,26 @@ var Args = (function()
         return params;
     }
 
-    var shift = function(arr){ return arr.shift()};
-
-    var marshalers = {
-        number: compose(shift, parseFloat),
-        string: compose(shift),
-        boolean: function(x) {return true;},
-        numberList: compose(shift, function(x){ return x.split(",").map(parseFloat)})
+    function createResultWithDefaults(params)
+    {
+        var result = {};
+        Object.keys(params).map(function(paramKey){
+                result[paramKey] = defaults[params[paramKey]];
+            });
+        return result;
     }
 
     return {
         create: function(schema)
         {
             var params = flatParams(schema || {});
+            var resultPrototype = createResultWithDefaults(params);
+
             return function(args)
             {
                 var argsArray = (args || "").split(" ");
-                var result = {};
+                var result = Object.create(resultPrototype);
+
                 while (argsArray.length > 0)
                 {
                     var current= argsArray.shift();
