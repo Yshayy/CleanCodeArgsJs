@@ -22,23 +22,21 @@ var Args = (function()
 
     function flatParams(schema)
     {
-        var params = {};
-        Object.keys(schema).forEach(function(paramType){
+        return Object.keys(schema).reduce(function(params, paramType){
             schema[paramType].split(',').forEach(function(ParamValue)
             {
                 params[ParamValue] = paramType
             });
-        });
-        return params;
+            return params;
+        }, {});
     }
 
     function createResultWithDefaults(params)
     {
-        var result = {};
-        Object.keys(params).map(function(paramKey){
+        return Object.keys(params).reduce(function(result, paramKey){
                 result[paramKey] = defaults[params[paramKey]];
-            });
-        return result;
+                return result;
+            }, {});
     }
 
     return {
