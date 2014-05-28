@@ -1,12 +1,14 @@
 var Args = (function()
 {
-    var shift = function(arr){return arr.shift();}
+    function pipe(fn1, fn2){return function(){return fn2(fn1.apply(this,arguments))}}
+
+    function shift(arr){return arr.shift();}
 
     var marshalers = {
-        number: compose(shift, parseFloat),
+        number: pipe(shift, parseFloat),
         string: shift,
         boolean: function(x) {return true;},
-        numberList: compose(shift, function(x){ return x.split(",").map(parseFloat)})
+        numberList: pipe(shift, function(x){ return x.split(",").map(parseFloat)})
     }
 
     var defaults = {
@@ -16,7 +18,7 @@ var Args = (function()
         numberList: []
     };
 
-    function compose(fn1, fn2){return function(){return fn2(fn1.apply(this,arguments))}}
+
 
     function isFlag(s){return s[0] === '-'}
 
