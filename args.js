@@ -7,7 +7,7 @@ var Args = (function()
     var marshalers = {
         number: pipe(shift, parseFloat),
         string: shift,
-        boolean: function(x) {return true;},
+        boolean: function() {return true;},
         numberList: pipe(shift, function(x){ return x.split(",").map(parseFloat)})
     }
 
