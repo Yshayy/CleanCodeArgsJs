@@ -18,8 +18,6 @@ var Args = (function()
         numberList: []
     };
 
-
-
     function isFlag(s){return s[0] === '-'}
 
     function flatParams(schema)
