@@ -1,5 +1,4 @@
-(function(exports)
-{
+(function(exports){
 	function pipe(fn1, fn2){return function(){return fn2(fn1.apply(this,arguments))}}
 	
 	function shift(arr){return arr.shift();}
