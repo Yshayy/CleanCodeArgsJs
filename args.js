@@ -1,4 +1,4 @@
-var Args = (function()
+(function(exports)
 {
     function pipe(fn1, fn2){return function(){return fn2(fn1.apply(this,arguments))}}
 
@@ -39,32 +39,29 @@ var Args = (function()
             }, {});
     }
 
-    return {
-        create: function(schema)
-        {
-            var params = flatParams(schema || {});
-            var resultPrototype = createResultWithDefaults(params);
+	exports.create = function(schema)
+	{
+		var params = flatParams(schema || {});
+		var resultPrototype = createResultWithDefaults(params);
 
-            return function(args)
-            {
-                var argsArray = (args || "").split(" ");
-                var result = Object.create(resultPrototype);
+		return function(args){
+			var argsArray = (args || "").split(" ");
+			var result = Object.create(resultPrototype);
 
-                while (argsArray.length > 0)
-                {
-                    var current= argsArray.shift();
-                    if (!isFlag(current)) continue;
-                    var flag = current.substr(1);
-                    if (!params[flag])
-                        throw "parameter is not defined";
-                    var marshaler = marshalers[params[flag]];
-                    if (!marshaler) {
-                        throw "parameter type is not supported";
-                    }
-                    result[flag] = marshaler(argsArray);
-                }
-                return result;
-            };
-        }
-    }
-})();
+			while (argsArray.length > 0)
+			{
+				var current= argsArray.shift();
+				if (!isFlag(current)) continue;
+				var flag = current.substr(1);
+				if (!params[flag])
+					throw "parameter is not defined";
+				var marshaler = marshalers[params[flag]];
+				if (!marshaler) {
+					throw "parameter type is not supported";
+				}
+				result[flag] = marshaler(argsArray);
+			}
+			return result;
+		};
+	}
+})(exports);

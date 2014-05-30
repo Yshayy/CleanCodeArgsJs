@@ -1,13 +1,15 @@
+var Args = require("../args.js");
+
 describe("No schema", function()
 {
     var parse = Args.create({});
     it("should pass", function()
     {
-        expect(function(){ parse("")}).not.to.toThrow();
+        expect(function(){ return parse("")}).not.toThrow();
     });
     it("should reject unknown flags", function()
     {
-        expect(function(){ parse("-d")}).to.toThrow();
+        expect(function(){ return parse("-d")}).toThrow();
     });
 });
 
@@ -16,7 +18,7 @@ describe("With one boolean flag", function()
     var parse = Args.create({boolean: "f"});
     it("flag should be false if absent", function()
     {
-        expect(parse("")["f"]).not.toBe(false);
+        expect(parse("")["f"]).toBe(false);
     });
 
     it("should be true if present", function()
@@ -40,7 +42,7 @@ describe("With several boolean arguments", function()
 
     it ("should be invalid if unexpected arguments are present", function()
     {
-        expect(function(){ parse("-q")}).to.toThrow();
+        expect(function(){ return parse("-q")}).toThrow();
     })
 });
 
@@ -103,7 +105,7 @@ describe("With a complex schema", function()
 
     it("should throw if undefined argument", function()
     {
-        expect(function(){ parse("-q")}).to.toThrow();
+        expect(function(){ return parse("-q")}).toThrow();
     });
 });
 
