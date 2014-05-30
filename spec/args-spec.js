@@ -117,7 +117,7 @@ describe("With a single number-list element", function()
         expect(parse("")["l"]).toEqual([]);
     });
 
-    it("should report s as string if presented", function()
+    it("should report l as numberlist if presented", function()
     {
         expect(parse("-l 1,2,3,4")["l"]).toEqual([1,2,3,4]);
     });
